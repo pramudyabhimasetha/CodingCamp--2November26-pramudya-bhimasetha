@@ -1,0 +1,806 @@
+/* ═══════════════════════════════════════════════════════════════
+   Life Dashboard — CSS
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─── 1. RESET ─────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ─── 2. DESIGN TOKENS — Light Mode ───────────────────────────── */
+:root {
+  /* Warna utama */
+  --color-accent:      #6366f1;   /* indigo */
+  --color-accent-dark: #4f46e5;
+  --color-accent-soft: #eef2ff;
+  --color-danger:      #ef4444;
+  --color-success:     #22c55e;
+  --color-warning:     #f59e0b;
+
+  /* Permukaan */
+  --color-bg:          #f1f5f9;
+  --color-surface:     #ffffff;
+  --color-surface-2:   #f8fafc;
+  --color-border:      #e2e8f0;
+
+  /* Teks */
+  --color-text:        #0f172a;
+  --color-text-muted:  #64748b;
+  --color-text-white:  #ffffff;
+
+  /* Bentuk & efek */
+  --radius-sm:   8px;
+  --radius-md:   14px;
+  --radius-lg:   20px;
+  --radius-full: 9999px;
+
+  --shadow-sm:  0 1px 4px rgba(0,0,0,.06);
+  --shadow-md:  0 4px 16px rgba(0,0,0,.08);
+  --shadow-lg:  0 12px 40px rgba(0,0,0,.14);
+
+  --transition: 0.2s ease;
+
+  /* Gradien hero */
+  --grad-hero: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+}
+
+/* ─── 3. DESIGN TOKENS — Dark Mode ────────────────────────────── */
+[data-theme="dark"] {
+  --color-accent:      #818cf8;
+  --color-accent-dark: #6366f1;
+  --color-accent-soft: #1e1b4b;
+
+  --color-bg:          #0b0f1a;
+  --color-surface:     #141928;
+  --color-surface-2:   #1e2438;
+  --color-border:      #2a3352;
+
+  --color-text:        #e2e8f0;
+  --color-text-muted:  #94a3b8;
+
+  --shadow-sm: 0 1px 4px rgba(0,0,0,.3);
+  --shadow-md: 0 4px 16px rgba(0,0,0,.4);
+  --shadow-lg: 0 12px 40px rgba(0,0,0,.6);
+
+  --grad-hero: linear-gradient(135deg, #312e81 0%, #4c1d95 50%, #5b21b6 100%);
+}
+
+/* ─── 4. BASE ──────────────────────────────────────────────────── */
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  min-height: 100vh;
+  transition: background-color var(--transition), color var(--transition);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── 5. TOPBAR ────────────────────────────────────────────────── */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.5rem;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.brand-icon {
+  font-size: 1.3rem;
+}
+
+.brand-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  letter-spacing: 0.3px;
+}
+
+.topbar-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-2);
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background var(--transition), transform var(--transition), border-color var(--transition);
+  color: var(--color-text);
+}
+
+.icon-btn:hover {
+  background: var(--color-accent-soft);
+  border-color: var(--color-accent);
+  transform: scale(1.05);
+}
+
+/* ─── 6. DASHBOARD GRID ────────────────────────────────────────── */
+.dashboard {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  max-width: 980px;
+  margin: 1.5rem auto;
+  padding: 0 1.25rem 2.5rem;
+}
+
+/* ─── 7. CARDS (base) ──────────────────────────────────────────── */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  box-shadow: var(--shadow-md);
+  transition: background var(--transition), border-color var(--transition), box-shadow var(--transition);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+.card-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--color-text-muted);
+  margin-bottom: 1.25rem;
+}
+
+.card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.card-top .card-label {
+  margin-bottom: 0;
+}
+
+/* ─── 8. GREETING CARD ─────────────────────────────────────────── */
+.card-greeting {
+  grid-column: 1 / -1;
+  position: relative;
+  overflow: hidden;
+  background: var(--grad-hero);
+  border: none;
+  color: var(--color-text-white);
+  padding: 2.5rem 2rem;
+  min-height: 160px;
+  display: flex;
+  align-items: center;
+}
+
+.greeting-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.clock {
+  font-size: clamp(2.8rem, 8vw, 4.5rem);
+  font-weight: 800;
+  letter-spacing: 3px;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.date-text {
+  font-size: 0.95rem;
+  opacity: 0.85;
+  font-weight: 500;
+}
+
+.greeting-text {
+  font-size: clamp(1.25rem, 3vw, 1.8rem);
+  font-weight: 700;
+  margin-top: 0.4rem;
+  opacity: 0.96;
+}
+
+/* Dekorasi lingkaran latar belakang */
+.greeting-deco {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.deco-circle {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.12;
+  background: #fff;
+}
+
+.deco-1 {
+  width: 260px;
+  height: 260px;
+  right: -60px;
+  top: -80px;
+}
+
+.deco-2 {
+  width: 160px;
+  height: 160px;
+  right: 140px;
+  bottom: -70px;
+}
+
+/* ─── 9. TIMER CARD ────────────────────────────────────────────── */
+.card-timer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* SVG ring */
+.timer-ring-wrap {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  flex-shrink: 0;
+  margin: 0.5rem 0;
+}
+
+.timer-ring {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.ring-track {
+  fill: none;
+  stroke: var(--color-border);
+  stroke-width: 10;
+}
+
+.ring-fill {
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 10;
+  stroke-linecap: round;
+  /* circumference = 2π × 70 ≈ 439.82 */
+  stroke-dasharray: 439.82;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 0.8s linear, stroke var(--transition);
+}
+
+/* Angka di tengah ring */
+.timer-digits {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text);
+  transition: color var(--transition);
+}
+
+.timer-status {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.timer-controls {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+
+.btn-timer {
+  flex: 1;
+  min-width: 80px;
+}
+
+/* ─── 10. TO-DO CARD ───────────────────────────────────────────── */
+.card-todo {
+  display: flex;
+  flex-direction: column;
+}
+
+.todo-counter {
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+}
+
+.todo-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.todo-input {
+  flex: 1;
+}
+
+.todo-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 260px;
+  overflow-y: auto;
+  padding-right: 3px;
+}
+
+/* Scrollbar tipis */
+.todo-list::-webkit-scrollbar {
+  width: 4px;
+}
+.todo-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+.todo-list::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 0.8rem;
+  transition: background var(--transition), border-color var(--transition);
+  animation: slideIn 0.2s ease;
+}
+
+.todo-item:hover {
+  border-color: var(--color-accent);
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.todo-item.done {
+  opacity: 0.65;
+}
+
+.todo-item.done .todo-text {
+  text-decoration: line-through;
+  color: var(--color-text-muted);
+}
+
+.todo-check {
+  width: 17px;
+  height: 17px;
+  cursor: pointer;
+  accent-color: var(--color-accent);
+  flex-shrink: 0;
+}
+
+.todo-text {
+  flex: 1;
+  font-size: 0.88rem;
+  word-break: break-word;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--color-text);
+  font-family: inherit;
+  cursor: text;
+  line-height: 1.4;
+}
+
+.todo-text:focus {
+  background: var(--color-surface);
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+
+.todo-delete {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  padding: 3px 5px;
+  border-radius: 4px;
+  line-height: 1;
+  transition: color var(--transition), background var(--transition);
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity var(--transition), color var(--transition);
+}
+
+.todo-item:hover .todo-delete,
+.todo-item:focus-within .todo-delete {
+  opacity: 1;
+}
+
+.todo-delete:hover {
+  color: var(--color-danger);
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.todo-empty {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  padding: 1.5rem 0;
+}
+
+/* ─── 11. QUICK LINKS CARD ─────────────────────────────────────── */
+.card-links {
+  display: flex;
+  flex-direction: column;
+}
+
+.links-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.link-chip-wrap {
+  position: relative;
+}
+
+.link-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 1rem;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-text);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition), color var(--transition), transform var(--transition);
+  white-space: nowrap;
+}
+
+.link-chip:hover {
+  background: var(--color-accent);
+  color: var(--color-text-white);
+  border-color: var(--color-accent);
+  transform: translateY(-1px);
+}
+
+.link-favicon {
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.link-remove-btn {
+  display: none;
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: none;
+  background: var(--color-danger);
+  color: #fff;
+  font-size: 0.6rem;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  z-index: 2;
+}
+
+.link-chip-wrap:hover .link-remove-btn {
+  display: flex;
+}
+
+.links-empty {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.btn-add-link {
+  align-self: flex-start;
+  margin-top: auto;
+}
+
+/* ─── 12. TOMBOL (Buttons) ─────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.5rem 1.1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  transition: background var(--transition), transform var(--transition), opacity var(--transition), box-shadow var(--transition);
+  white-space: nowrap;
+}
+
+.btn:active {
+  transform: scale(0.96);
+}
+
+.btn-primary {
+  background: var(--color-accent);
+  color: var(--color-text-white);
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.35);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--color-accent-dark);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.5);
+}
+
+.btn-secondary {
+  background: var(--color-surface-2);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: var(--color-border);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background: var(--color-surface-2);
+  color: var(--color-text);
+}
+
+.btn:disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* ─── 13. FORM INPUTS ──────────────────────────────────────────── */
+input[type="text"],
+input[type="url"],
+input[type="number"] {
+  display: block;
+  width: 100%;
+  padding: 0.55rem 0.8rem;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-2);
+  color: var(--color-text);
+  font-size: 0.9rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color var(--transition), background var(--transition), box-shadow var(--transition);
+}
+
+input:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+input::placeholder {
+  color: var(--color-text-muted);
+}
+
+/* ─── 14. MODAL ────────────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  animation: fadeIn 0.15s ease;
+}
+
+.modal-overlay.hidden {
+  display: none;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.modal {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  width: min(440px, 92vw);
+  box-shadow: var(--shadow-lg);
+  animation: scaleUp 0.18s ease;
+  overflow: hidden;
+}
+
+@keyframes scaleUp {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem 1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.modal-header h2 {
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  color: var(--color-text-muted);
+  padding: 4px 6px;
+  border-radius: var(--radius-sm);
+  transition: background var(--transition), color var(--transition);
+}
+
+.modal-close:hover {
+  background: var(--color-surface-2);
+  color: var(--color-text);
+}
+
+.modal-body {
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.modal-footer {
+  display: flex;
+  gap: 0.6rem;
+  padding: 1rem 1.5rem 1.25rem;
+  border-top: 1px solid var(--color-border);
+}
+
+/* ─── 15. FORM GROUP ───────────────────────────────────────────── */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.form-group label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-hint {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+/* ─── 16. TOAST ────────────────────────────────────────────────── */
+.toast {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-text);
+  color: var(--color-bg);
+  padding: 0.65rem 1.4rem;
+  border-radius: var(--radius-full);
+  font-size: 0.875rem;
+  font-weight: 500;
+  box-shadow: var(--shadow-lg);
+  z-index: 300;
+  transition: opacity 0.3s ease;
+  white-space: nowrap;
+}
+
+.toast.hidden {
+  display: none;
+}
+
+/* ─── 17. TIMER SELESAI ────────────────────────────────────────── */
+.ring-fill.done {
+  stroke: var(--color-success);
+}
+
+.timer-digits.done {
+  color: var(--color-success);
+}
+
+/* ─── 18. RESPONSIVE ───────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .dashboard {
+    grid-template-columns: 1fr;
+  }
+
+  .card-greeting {
+    grid-column: 1;
+    padding: 1.75rem 1.25rem;
+  }
+
+  .clock {
+    font-size: 2.6rem;
+  }
+
+  .greeting-text {
+    font-size: 1.2rem;
+  }
+
+  .timer-digits {
+    font-size: 1.65rem;
+  }
+
+  .topbar {
+    padding: 0.6rem 1rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .timer-controls {
+    flex-direction: column;
+  }
+
+  .btn-timer {
+    width: 100%;
+  }
+}

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Life Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════
+       MODAL: Settings (Nama + Durasi Pomodoro)
+  ════════════════════════════════════════════ -->
+  <div id="modal-settings" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modal-settings-title">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="modal-settings-title">⚙️ Pengaturan</h2>
+        <button class="modal-close" id="btn-settings-close" aria-label="Tutup pengaturan">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="input-name">Nama Kamu</label>
+          <input type="text" id="input-name" placeholder="Contoh: Budi" maxlength="32" autocomplete="off" />
+          <span class="form-hint">Akan ditampilkan di sapaan atas.</span>
+        </div>
+
+        <div class="form-group">
+          <label for="input-pomodoro">Durasi Fokus (menit)</label>
+          <input type="number" id="input-pomodoro" min="1" max="120" value="25" />
+          <span class="form-hint">Batas: 1 – 120 menit. Default 25 menit.</span>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button id="btn-settings-save" class="btn btn-primary">Simpan</button>
+        <button id="btn-settings-cancel" class="btn btn-secondary">Batal</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       MODAL: Tambah / Edit Quick Link
+  ════════════════════════════════════════════ -->
+  <div id="modal-link" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modal-link-title">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="modal-link-title">🔗 Tambah Link</h2>
+        <button class="modal-close" id="btn-link-close" aria-label="Tutup modal link">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="input-link-label">Nama / Label</label>
+          <input type="text" id="input-link-label" placeholder="Contoh: GitHub" maxlength="32" autocomplete="off" />
+        </div>
+
+        <div class="form-group">
+          <label for="input-link-url">Alamat URL</label>
+          <input type="url" id="input-link-url" placeholder="https://..." autocomplete="off" />
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button id="btn-link-save" class="btn btn-primary">Simpan</button>
+        <button id="btn-link-cancel" class="btn btn-secondary">Batal</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       TOPBAR
+  ════════════════════════════════════════════ -->
+  <header class="topbar">
+    <div class="topbar-brand">
+      <span class="brand-icon">🚀</span>
+      <span class="brand-name">Life Dashboard</span>
+    </div>
+    <div class="topbar-actions">
+      <button id="btn-theme" class="icon-btn" aria-label="Ganti mode tampilan" title="Light / Dark Mode">
+        <span id="theme-icon">🌙</span>
+      </button>
+      <button id="btn-settings-open" class="icon-btn" aria-label="Buka pengaturan" title="Pengaturan">
+        ⚙️
+      </button>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════════════════════
+       MAIN CONTENT
+  ════════════════════════════════════════════ -->
+  <main class="dashboard">
+
+    <!-- ── 1. GREETING & CLOCK ─────────────────── -->
+    <section class="card card-greeting" aria-label="Sapaan dan jam">
+      <div class="greeting-content">
+        <p id="el-time" class="clock" aria-live="polite">00:00:00</p>
+        <p id="el-date" class="date-text"></p>
+        <h1 id="el-greeting" class="greeting-text"></h1>
+      </div>
+      <div class="greeting-deco" aria-hidden="true">
+        <div class="deco-circle deco-1"></div>
+        <div class="deco-circle deco-2"></div>
+      </div>
+    </section>
+
+    <!-- ── 2. FOCUS TIMER ─────────────────────── -->
+    <section class="card card-timer" aria-label="Focus timer">
+      <h2 class="card-label">⏱ Focus Timer</h2>
+
+      <div class="timer-ring-wrap">
+        <svg class="timer-ring" viewBox="0 0 160 160" aria-hidden="true">
+          <circle class="ring-track" cx="80" cy="80" r="70" />
+          <circle id="ring-fill" class="ring-fill" cx="80" cy="80" r="70" />
+        </svg>
+        <div id="el-timer" class="timer-digits" aria-live="polite">25:00</div>
+      </div>
+
+      <p id="timer-status-text" class="timer-status">Siap untuk fokus 💪</p>
+
+      <div class="timer-controls">
+        <button id="btn-timer-start" class="btn btn-primary btn-timer">▶ Mulai</button>
+        <button id="btn-timer-stop"  class="btn btn-secondary btn-timer" disabled>⏸ Berhenti</button>
+        <button id="btn-timer-reset" class="btn btn-ghost btn-timer">↺ Reset</button>
+      </div>
+    </section>
+
+    <!-- ── 3. TO-DO LIST ──────────────────────── -->
+    <section class="card card-todo" aria-label="Daftar tugas">
+      <div class="card-top">
+        <h2 class="card-label">✅ To-Do List</h2>
+        <span id="todo-counter" class="todo-counter">0 tugas</span>
+      </div>
+
+      <form id="form-todo" class="todo-form" novalidate>
+        <input
+          type="text"
+          id="input-todo"
+          class="todo-input"
+          placeholder="Tambah tugas baru…"
+          maxlength="120"
+          aria-label="Tugas baru"
+          autocomplete="off"
+        />
+        <button type="submit" class="btn btn-primary" aria-label="Tambah tugas">+</button>
+      </form>
+
+      <ul id="list-todo" class="todo-list" aria-label="Daftar tugas" aria-live="polite">
+        <!-- diisi JS -->
+      </ul>
+
+      <p id="todo-empty" class="todo-empty hidden">Belum ada tugas. Tambahkan sekarang! 🎯</p>
+    </section>
+
+    <!-- ── 4. QUICK LINKS ─────────────────────── -->
+    <section class="card card-links" aria-label="Tautan cepat">
+      <div class="card-top">
+        <h2 class="card-label">🔗 Quick Links</h2>
+      </div>
+
+      <div id="links-grid" class="links-grid">
+        <!-- diisi JS -->
+      </div>
+
+      <p id="links-empty" class="links-empty hidden">Belum ada link tersimpan.</p>
+
+      <button id="btn-add-link" class="btn btn-secondary btn-add-link">
+        + Tambah Link
+      </button>
+    </section>
+
+  </main>
+
+  <!-- ═══════════════════════════════════════════
+       TOAST NOTIFIKASI
+  ════════════════════════════════════════════ -->
+  <div id="toast" class="toast hidden" role="alert" aria-live="assertive"></div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
